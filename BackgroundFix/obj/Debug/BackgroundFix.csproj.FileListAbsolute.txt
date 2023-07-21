@@ -8,3 +8,14 @@ D:\Junk\VisualStudio\C#\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.cspr
 D:\Junk\VisualStudio\C#\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.csproj.CoreCompileInputs.cache
 D:\Junk\VisualStudio\C#\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.exe
 D:\Junk\VisualStudio\C#\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.pdb
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\bin\Debug\BackgroundFix.exe.config
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\bin\Debug\BackgroundFix.exe
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\bin\Debug\BackgroundFix.pdb
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.csproj.AssemblyReference.cache
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.csproj.SuggestedBindingRedirects.cache
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.Form1.resources
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.Properties.Resources.resources
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.csproj.GenerateResource.cache
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.csproj.CoreCompileInputs.cache
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.exe
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.pdb
