@@ -1,12 +1,10 @@
-﻿/* 
+﻿using System;
+using System.Runtime.InteropServices;
+using Microsoft.Win32;
+/* 
  * Code From
  * https://gist.github.com/Drarig29/4aa001074826f7da69b5bb73a83ccd39
  */
-
-using System;
-using System.Runtime.InteropServices;
-using Microsoft.Win32;
-
 namespace BackgroundFix
 {
     public enum WallpaperStyle
@@ -169,7 +167,8 @@ namespace BackgroundFix
         public static void RestoreState()
         {
             if (!_backupState.HasValue)
-                throw new Exception("You must call BackupState() before.");
+                throw new NotBackedUpExeption("You must call BackupState() before.");
+                //throw new Exception("You must call BackupState() before.");
 
             SetWallpaperConfig(_backupState.Value.Config);
             ChangeWallpaper(_backupState.Value.Wallpaper);
