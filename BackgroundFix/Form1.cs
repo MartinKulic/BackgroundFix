@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,8 +16,9 @@ namespace BackgroundFix
     public partial class Form1 : Form
     {
         private int displayCount;
-        private readonly string resources = Path.GetFullPath("./res/");
+        private readonly string resources = Application.StartupPath+"\\res\\"; //Path.GetFullPath("./res/");
         private bool toggle = false;
+        private bool firstTimeShow = true;
         public Form1()
         {
             InitializeComponent();
@@ -24,11 +26,6 @@ namespace BackgroundFix
 
             //sets checkbox accordint to registry state
             checkBox1.Checked = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", false).GetValueNames().Contains(Application.ProductName);
-
-            if (File.Exists(resources + "memory.txt")) //Thanks to file memory.txt form know where to hide
-            {
-                this.Hide();
-            }
 
             //To prevent file not found when lookin for res
             if (!Directory.Exists(resources))
@@ -45,7 +42,6 @@ namespace BackgroundFix
                     //ignore
                 }
             }
-
         }
         /// <summary>
         /// Tests changing wallpaper
@@ -63,11 +59,14 @@ namespace BackgroundFix
             if (toggle)
             {
                 toggle = false;
-                WallpaperChanger.SilentSet(resources + "Dualscreen.jpg");
+                WallpaperChanger.Set(resources + "Dualscreen.jpg");
+                richTextBox1.AppendText("\n" + resources + "Dualscreen.jpg");
+
             } else
             {
                 toggle = true;
                 WallpaperChanger.SilentSet(resources + "Singelscreen.png");
+                richTextBox1.AppendText("\n" + resources + "Singelscreen.jpg");
             }
         }
 
@@ -126,6 +125,7 @@ namespace BackgroundFix
         private void button3_Click(object sender, EventArgs e)
         {
             this.Hide();
+            firstTimeShow = false;
         }
         /// <summary>
         /// Making app start and not start at startup
@@ -192,6 +192,7 @@ namespace BackgroundFix
             if (File.Exists(textBox1.Text))
             {
                 File.Copy(textBox1.Text, resources + "Singelscreen.png", true);
+                richTextBox1.AppendText("\nSavet s. to: " + resources + "Singelscreen.png");
             }
             else
             {
@@ -202,6 +203,7 @@ namespace BackgroundFix
             if (File.Exists(textBox2.Text))
             {
                 File.Copy(textBox2.Text, resources + "Dualscreen.jpg", true);
+                richTextBox1.AppendText("\nSavet d. to: " + resources + "Dualscreen.jpg");
             }
             else
             {
@@ -214,11 +216,33 @@ namespace BackgroundFix
             {
                 File.WriteAllText(resources + "memory.txt", "Not first start");
             }
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             WallpaperChanger.RestoreState();
+        }
+
+        public void hideIfSetUp() 
+        {
+            if (File.Exists(resources + "memory.txt")) //Thanks to file memory.txt form know where to hide
+            {
+                this.Hide();
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            hideIfSetUp();
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            if (firstTimeShow)
+            {
+                hideIfSetUp() ;
+            }
         }
     }
 }

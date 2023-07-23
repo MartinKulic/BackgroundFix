@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using Microsoft.Win32;
 /* 
  * Code From
@@ -159,6 +160,7 @@ namespace BackgroundFix
             };
 
             _historyRestored = false;
+
         }
 
         /// <summary>
@@ -213,5 +215,6 @@ namespace BackgroundFix
             Set(filename, style);
             RestoreHistory();
         }
+
     }
 }

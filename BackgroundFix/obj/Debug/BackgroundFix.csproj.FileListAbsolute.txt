@@ -19,3 +19,7 @@ D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\Back
 D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.csproj.CoreCompileInputs.cache
 D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.exe
 D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.pdb
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\bin\Debug\BackgroundFix.exe.manifest
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\bin\Debug\BackgroundFix.application
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.exe.manifest
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.application
