@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,8 +21,27 @@ namespace BackgroundFix
         {
             InitializeComponent();
             displayCount = Screen.AllScreens.Length;
-        }
 
+            //sets checkbox accordint to registry state
+            checkBox1.Checked = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", false).GetValueNames().Contains(Application.ProductName);
+
+            if (File.Exists(resources + "memory.txt")) //Thanks to file memory.txt form know where to hide
+            {
+                this.Hide();
+            }
+
+            //To prevent file not found when lookin for res
+            if (!Directory.Exists(resources))
+            {
+                Directory.CreateDirectory(resources);
+            }
+
+        }
+        /// <summary>
+        /// Tests changing wallpaper
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             this.richTextBox1.AppendText("Screens:");
@@ -96,6 +116,99 @@ namespace BackgroundFix
         private void button3_Click(object sender, EventArgs e)
         {
             this.Hide();
+        }
+        /// <summary>
+        /// Making app start and not start at startup
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (checkBox1.Checked)
+            {
+                key.SetValue(Application.ProductName, Application.ExecutablePath);
+              
+            } else
+            {
+                key.DeleteValue(Application.ProductName, false);
+            }
+            key.Close();
+        }
+        /// <summary>
+        /// Setting images for wallpaper sets walues to textBoxes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonExplore_Click(object sender, EventArgs e)
+        {
+            bool choosingSingle = sender == buttonExplore1;
+
+            openFileDialog.DefaultExt = Application.StartupPath;
+            if (choosingSingle)
+            {
+                openFileDialog.Title = "Singlescreen";
+                openFileDialog.FileName = "Singlescreen.png";
+            } else
+            {
+                openFileDialog.Title = "Dualscreen";
+                openFileDialog.FileName = "Dualscreen.png";
+            }
+            
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+                if (choosingSingle)
+                {
+                    textBox1.Text = filePath;
+                }
+                else
+                {
+                    textBox2.Text = filePath;
+                }
+            }
+
+        }
+        /// <summary>
+        /// Copy images from textBoxes to local res directory
+        /// also create memory.txt if not exist
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            bool allSuccessfullySaved = true;
+            //Copy image Singlescreen
+            if (File.Exists(textBox1.Text))
+            {
+                File.Copy(textBox1.Text, resources + "Singelscreen.png", true);
+            }
+            else
+            {
+                MessageBox.Show("Non existing file for Singlescreen\n" + textBox1.Text + "\nPlese make sure entered path or file exists", "WARMING", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                allSuccessfullySaved = false;
+            }
+            //Copy image DualScreen
+            if (File.Exists(textBox2.Text))
+            {
+                File.Copy(textBox2.Text, resources + "Dualscreen.jpg", true);
+            }
+            else
+            {
+                MessageBox.Show("Non existing file for Dualcreen\n" + textBox2.Text + "\nPlese make sure entered path or file exists", "WARMING", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                allSuccessfullySaved = false;
+            }
+
+            //Check / create memory.txt
+            if (!File.Exists(resources + "memory.txt") && allSuccessfullySaved)
+            {
+                File.WriteAllText(resources + "memory.txt", "Not first start");
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            WallpaperChanger.RestoreState();
         }
     }
 }
