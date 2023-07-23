@@ -34,6 +34,16 @@ namespace BackgroundFix
             if (!Directory.Exists(resources))
             {
                 Directory.CreateDirectory(resources);
+            } else
+            {
+                try
+                {
+                    updateWallpaper();
+                } 
+                catch (FileNotFoundException) 
+                { 
+                    //ignore
+                }
             }
 
         }
