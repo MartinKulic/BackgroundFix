@@ -87,6 +87,7 @@ namespace BackgroundFix
                 //this.Location = new Point(Cursor.Position.X - 150, Cursor.Position.Y - 150);
                 //this.Show();
                 this.CenterToScreen();
+                this.Show();
                 this.Activate();
                 this.TopMost = true;
                 richTextBox1.AppendText("\nProgram si already running");
