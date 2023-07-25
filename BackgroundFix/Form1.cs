@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -23,6 +24,8 @@ namespace BackgroundFix
         private readonly string resources = Application.StartupPath+"\\res\\"; //Path.GetFullPath("./res/");
         private bool toggle = false;
         private bool firstTimeShow = true;
+        private string extencionSinglescreen;
+        private string extencionDualscreen;
         public Form1()
         {
             InitializeComponent();
@@ -32,6 +35,7 @@ namespace BackgroundFix
             checkBox1.Checked = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", false).GetValueNames().Contains(Application.ProductName);
 
             //To prevent file not found when lookin for res
+            //When ther are more files with same name but diferent extension
             if (!Directory.Exists(resources))
             {
                 Directory.CreateDirectory(resources);
@@ -39,12 +43,14 @@ namespace BackgroundFix
             {
                 try
                 {
+                    setExtensions();
                     updateWallpaper();
                 } 
                 catch (FileNotFoundException) 
                 { 
                     //ignore
                 }
+                
             }
         }
         /// <summary>
@@ -54,7 +60,7 @@ namespace BackgroundFix
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            this.richTextBox1.AppendText("Screens:");
+            this.richTextBox1.AppendText("\nScreens:");
             foreach (Screen screen in Screen.AllScreens) {
                 this.richTextBox1.AppendText("\nworkArea: "+screen.WorkingArea + "\nbounds: " + screen.Bounds + "\nbitsPerBixell: " + screen.BitsPerPixel + "\ndeviceName: " +screen.DeviceName);
                 this.richTextBox1.AppendText("\n----------------");
@@ -63,14 +69,13 @@ namespace BackgroundFix
             if (toggle)
             {
                 toggle = false;
-                WallpaperChanger.Set(resources + "Dualscreen.jpg");
-                richTextBox1.AppendText("\n" + resources + "Dualscreen.jpg");
-
+                WallpaperChanger.Set(resources + "Dualscreen" + extencionDualscreen);
+                richTextBox1.AppendText("\n" + resources + "Dualscreen" + extencionDualscreen);
             } else
             {
                 toggle = true;
-                WallpaperChanger.SilentSet(resources + "Singelscreen.png");
-                richTextBox1.AppendText("\n" + resources + "Singelscreen.jpg");
+                WallpaperChanger.SilentSet(Path.Combine(resources, "Singelscreen" + extencionSinglescreen));
+                richTextBox1.AppendText("\n" + Path.Combine(resources, "Singelscreen" + extencionSinglescreen));
             }
         }
 
@@ -106,10 +111,10 @@ namespace BackgroundFix
             switch (displayCount)
             {
                 case 1:
-                    WallpaperChanger.SilentSet(resources + "Singelscreen.png");
+                    WallpaperChanger.SilentSet(Path.Combine(resources, "Singelscreen"+extencionSinglescreen));
                     break;
                 case 2:
-                    WallpaperChanger.SilentSet(resources + "Dualscreen.jpg");
+                    WallpaperChanger.SilentSet(Path.Combine(resources, "Dualscreen"+extencionDualscreen));
                     break;
                 default:
                     this.richTextBox1.AppendText("\nNumber of displays not recognised");
@@ -123,15 +128,29 @@ namespace BackgroundFix
         /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult messageBoxResult = MessageBox.Show("If you want program to continu working just hide it via \"Hide\" button or choose [NO].\n" +
-                "Aditional changes to its seting can be made by running executable aggain.\n" +
-                "\nWould like program to TERMINATE and STOP changing wallpaper?", "Ake you sure you want to terminate me?", 
-                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+            //richTextBox1.AppendText("\n"+sender);
 
-            if (messageBoxResult == DialogResult.Yes)
+            //DialogResult messageBoxResult = MessageBox.Show("If you want program to continu working just hide it via \"Hide\" button or choose [NO].\n" +
+            //    "Aditional changes to its seting can be made by running executable aggain.\n" +
+            //    "\nWould like program to TERMINATE and STOP changing wallpaper?", "Ake you sure you want to terminate me?", 
+            //    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+
+            //Application.Run(new MyCloseDialog(this, e));
+
+            Thread closeDialog = new Thread(() => Application.Run(new MyCloseDialog(this.Location)));
+            closeDialog.Start();
+            closeDialog.Join();
+
+            canceDialog(MyCloseDialog.result, e);
+        }
+
+        public void canceDialog(MyDialogResults result , FormClosingEventArgs e)
+        {
+            
+            if (result == MyDialogResults.YES)
             {
                 e.Cancel = false;
-                if (MessageBox.Show("Do you want revert changes made by program?", "Restore state?", 
+                if (MessageBox.Show("Do you want revert changes made by program?", "Restore state?",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     try
@@ -144,15 +163,15 @@ namespace BackgroundFix
                     }
                 }
 
-            } 
-            else 
+            }
+            else
             {
                 e.Cancel = true;
-                
-                if (messageBoxResult == DialogResult.No)
+                if (result == MyDialogResults.NO)
                     button3_Click(this, null);
             }
         }
+
         /// <summary>
         /// Hide when button is pressed
         /// </summary>
@@ -160,7 +179,7 @@ namespace BackgroundFix
         /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
-            if (File.Exists(resources + "Singelscreen.png") && File.Exists(resources + "Dualscreen.png")){
+            if (File.Exists(Path.Combine( resources, "Singelscreen"+extencionSinglescreen)) && File.Exists( Path.Combine(resources, "Dualscreen"+extencionDualscreen))){
                 this.Hide();
             } else
             {
@@ -205,11 +224,13 @@ namespace BackgroundFix
             if (choosingSingle)
             {
                 openFileDialog.Title = "Singlescreen";
-                openFileDialog.FileName = "Singlescreen.png";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.FileName = "Singlescreen.jpg";
             } else
             {
                 openFileDialog.Title = "Dualscreen";
-                openFileDialog.FileName = "Dualscreen.png";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.FileName = "Dualscreen.jpg";
             }
             
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -238,8 +259,9 @@ namespace BackgroundFix
             //Copy image Singlescreen
             if (File.Exists(textBox1.Text))
             {
-                File.Copy(textBox1.Text, resources + "Singelscreen.png", true);
-                richTextBox1.AppendText("\nSavet s. to: " + resources + "Singelscreen.png");
+                this.extencionSinglescreen = Path.GetExtension(textBox1.Text);
+                File.Copy(textBox1.Text, resources + "Singelscreen" + extencionSinglescreen, true);
+                richTextBox1.AppendText("\nSavet s. to: " + resources + "Singelscreen"+ extencionSinglescreen);
             }
             else
             {
@@ -249,8 +271,9 @@ namespace BackgroundFix
             //Copy image DualScreen
             if (File.Exists(textBox2.Text))
             {
-                File.Copy(textBox2.Text, resources + "Dualscreen.jpg", true);
-                richTextBox1.AppendText("\nSavet d. to: " + resources + "Dualscreen.jpg");
+                extencionDualscreen = Path.GetExtension(textBox2.Text);
+                File.Copy(textBox2.Text, resources + "Dualscreen" + extencionDualscreen, true);
+                richTextBox1.AppendText("\nSavet d. to: " + resources + "Dualscreen" + extencionDualscreen);
             }
             else
             {
@@ -262,6 +285,35 @@ namespace BackgroundFix
             if (!File.Exists(resources + "memory.txt") && allSuccessfullySaved)
             {
                 File.WriteAllText(resources + "memory.txt", "Not first start");
+            }
+
+            //Check for files with same mame
+            try
+            {
+                getExtension("Singelscreen");
+            } catch(MoreFilesWithSameNameException exept)
+            {
+                foreach (var path in exept.FilesFound)
+                {
+                    if (Path.GetExtension(path) != extencionSinglescreen)
+                    {
+                        File.Delete(path);
+                    }
+                }
+            }
+            try
+            {
+                getExtension("Dualscreen");
+            }
+            catch (MoreFilesWithSameNameException exept)
+            {
+                foreach (var path in exept.FilesFound)
+                {
+                    if (Path.GetExtension(path) != extencionDualscreen)
+                    {
+                        File.Delete(path);
+                    }
+                }
             }
 
         }
@@ -285,6 +337,72 @@ namespace BackgroundFix
             {
                 hideIfSetUp() ;
             }
+        }
+        private void setExtensions()
+        {
+            int delete = 2;
+            try
+            {
+                this.extencionSinglescreen = this.getExtension("Singelscreen");
+            }
+            catch (MoreFilesWithSameNameException e)
+            {
+                delete = (MessageBox.Show("More files with same name found. \nYes - all files will be deleted exept for one (may result in usage of unwanted Image)\nNo - no action will be taken, please navidate to:\n" + resources + "\n and meke sure only one of eatch Singescreen and Dualscreen images are present",
+                        "More files with same name", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes) ? 1 : 0;
+                if (delete==1)
+                {
+                    deleteExeptOne(e.FilesFound);
+                }
+            }
+
+            try
+            {
+                this.extencionDualscreen = this.getExtension("Dualscreen");
+            }
+            catch (MoreFilesWithSameNameException e)
+            {
+                switch (delete)
+                {
+                    //NO
+                    case 0:
+                        //nothing
+                        break;
+                    //YES
+                    case 1:
+                        deleteExeptOne(e.FilesFound);
+                        break;
+                    //Not thrown
+                    case 2:
+                        if ((MessageBox.Show("More files with same name found. \nYes - all files will be deleted exept for one (may result in usage of unwanted Image)\nNo - no action will be taken, please navidate to:\n" + resources + "\n and meke sure only one of eatch Singescreen and Dualscreen images are present",
+                        "More files with same name", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes))
+                        {
+                            deleteExeptOne(e.FilesFound);
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void deleteExeptOne(string[] filesFound)
+        {
+            for (int i = 0; i < filesFound.Length - 1; i++)
+            {
+                File.Delete(filesFound[i]);
+            }
+
+        }
+
+        private string getExtension (string fileName)
+        {
+            var helper = (Directory.GetFiles(resources, fileName+".*"));
+            if (helper.Length == 1)
+            {
+                return Path.GetExtension(helper[0]);
+            }
+            else if (helper.Length > 1)
+            {
+                throw new MoreFilesWithSameNameException("When searching for extension of " + fileName + " more files with same name found", helper);
+            } else { return ""; }
         }
 
     }

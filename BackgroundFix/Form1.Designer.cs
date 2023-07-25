@@ -141,9 +141,9 @@
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(170, 383);
+            this.saveButton.Location = new System.Drawing.Point(170, 350);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(167, 23);
+            this.saveButton.Size = new System.Drawing.Size(167, 56);
             this.saveButton.TabIndex = 10;
             this.saveButton.Text = "SAVE";
             this.saveButton.UseVisualStyleBackColor = true;
