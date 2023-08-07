@@ -10,8 +10,9 @@ namespace BackgroundFix
     internal class NativeMethod
     {
         /*
-         * Mechanism to rum only one instance od program by:
-         * https://www.codeproject.com/Articles/14353/Creating-a-Basic-Windows-Service-in-C
+         * Mechanism to rum only one instance of program by:
+         * Nullfx
+         * http://sanity-free.org/143/csharp_dotnet_single_instance_application.html
          * Another parts are scattered through Program.cs and Form.sc
          */
         public const int HWND_BROADCAST = 0xffff;

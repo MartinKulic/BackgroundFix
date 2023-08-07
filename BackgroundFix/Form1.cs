@@ -74,7 +74,7 @@ namespace BackgroundFix
             } else
             {
                 toggle = true;
-                WallpaperChanger.SilentSet(Path.Combine(resources, "Singelscreen" + extencionSinglescreen));
+                WallpaperChanger.Set(Path.Combine(resources, "Singelscreen" + extencionSinglescreen));
                 richTextBox1.AppendText("\n" + Path.Combine(resources, "Singelscreen" + extencionSinglescreen));
             }
         }
@@ -107,6 +107,8 @@ namespace BackgroundFix
         private void updateWallpaper()
         {
             displayCount = Screen.AllScreens.Length;
+
+            richTextBox1.AppendText("\nNumber of displays: "+ displayCount+" time: "+ System.DateTime.Now);
 
             switch (displayCount)
             {
@@ -320,7 +322,13 @@ namespace BackgroundFix
 
         private void button2_Click(object sender, EventArgs e)
         {
-            WallpaperChanger.RestoreState();
+            try
+            {
+                WallpaperChanger.RestoreState();
+            }
+            catch (NotBackedUpExeption)
+            { //ignore
+            }
         }
 
         private void hideIfSetUp() 
@@ -340,14 +348,17 @@ namespace BackgroundFix
         }
         private void setExtensions()
         {
-            int delete = 2;
+            int delete = 2;//represents action what to do when more files with same name found
+                           //0 => do nothing
+                           //1 => delete all file exept for one
+                           //2 => none duplicated names so far
             try
             {
                 this.extencionSinglescreen = this.getExtension("Singelscreen");
             }
             catch (MoreFilesWithSameNameException e)
             {
-                delete = (MessageBox.Show("More files with same name found. \nYes - all files will be deleted exept for one (may result in usage of unwanted Image)\nNo - no action will be taken, please navidate to:\n" + resources + "\n and meke sure only one of eatch Singescreen and Dualscreen images are present",
+                delete = (MessageBox.Show("More files with same name found. \nYes - all files will be deleted exept for one (may result in usage of unwanted Image)\nNo - no action will be taken, please navigate to:\n" + resources + "\n and meke sure only one of eatch Singescreen and Dualscreen images are present",
                         "More files with same name", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes) ? 1 : 0;
                 if (delete==1)
                 {
@@ -381,6 +392,11 @@ namespace BackgroundFix
                         break;
                 }
             }
+            //opens file explorer if NO selected
+            if (delete == 0)
+            {
+                System.Diagnostics.Process.Start("explorer.exe", "\"" + resources);
+            }
         }
 
         private void deleteExeptOne(string[] filesFound)
@@ -404,6 +420,14 @@ namespace BackgroundFix
                 throw new MoreFilesWithSameNameException("When searching for extension of " + fileName + " more files with same name found", helper);
             } else { return ""; }
         }
-
+        /// <summary>
+        /// Opens File explorer in res forder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button4_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", "\"" + resources);
+        }
     }
 }

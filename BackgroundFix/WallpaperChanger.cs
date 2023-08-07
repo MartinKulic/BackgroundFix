@@ -3,8 +3,9 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Microsoft.Win32;
 /* 
- * Code From
+ * Code From: Corentin Girard - Drarig29
  * https://gist.github.com/Drarig29/4aa001074826f7da69b5bb73a83ccd39
+ * Only modification is custom Exeption - NotBackedUpExeption
  */
 namespace BackgroundFix
 {
@@ -125,7 +126,7 @@ namespace BackgroundFix
             if (_historyRestored) return;
 
             if (!_backupState.HasValue)
-                throw new Exception("You must call BackupState() before.");
+                throw new NotBackedUpExeption("You must call BackupState() before.");
 
             var backupState = _backupState.Value;
 

@@ -41,6 +41,7 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveButton = new System.Windows.Forms.Button();
             this.buttonExplore2 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -84,9 +85,9 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(262, 415);
+            this.button3.Location = new System.Drawing.Point(262, 383);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(75, 55);
             this.button3.TabIndex = 4;
             this.button3.Text = "Hide";
             this.button3.UseVisualStyleBackColor = true;
@@ -141,9 +142,9 @@
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(170, 350);
+            this.saveButton.Location = new System.Drawing.Point(19, 194);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(167, 56);
+            this.saveButton.Size = new System.Drawing.Size(318, 56);
             this.saveButton.TabIndex = 10;
             this.saveButton.Text = "SAVE";
             this.saveButton.UseVisualStyleBackColor = true;
@@ -159,11 +160,22 @@
             this.buttonExplore2.UseVisualStyleBackColor = true;
             this.buttonExplore2.Click += new System.EventHandler(this.buttonExplore_Click);
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(170, 383);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 12;
+            this.button4.Text = "Open Resources";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.buttonExplore2);
             this.Controls.Add(this.buttonExplore1);
             this.Controls.Add(this.saveButton);
@@ -200,6 +212,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button buttonExplore2;
+        private System.Windows.Forms.Button button4;
     }
 }
 
