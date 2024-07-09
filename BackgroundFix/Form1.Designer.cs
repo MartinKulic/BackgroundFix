@@ -139,6 +139,7 @@
             // 
             this.openFileDialog.FileName = "image.png";
             this.openFileDialog.Filter = "\"All files\"|*.*|\"Graphics\"|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff";
+            this.openFileDialog.FilterIndex = 1;
             // 
             // saveButton
             // 

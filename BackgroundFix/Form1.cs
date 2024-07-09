@@ -44,6 +44,7 @@ namespace BackgroundFix
                 try
                 {
                     setExtensions();
+                    setTextboxes();
                     updateWallpaper();
                 } 
                 catch (FileNotFoundException) 
@@ -81,11 +82,9 @@ namespace BackgroundFix
 
         protected override void WndProc(ref Message m)
         {
-            if (displayCount != Screen.AllScreens.Length) //detect change in number of displays
+            if (m.Msg == 0x46 && displayCount != Screen.AllScreens.Length) //detect change in number of displays
             {
                 updateWallpaper();
-
-                this.richTextBox1.AppendText("\nWinProc:" + m + "\nAllScreans.len:" + displayCount);
             }
             else if (m.Msg == NativeMethod.WM_SHOW_Yourself) //if user attend to start more then one instance of application
             {
@@ -108,7 +107,7 @@ namespace BackgroundFix
         {
             displayCount = Screen.AllScreens.Length;
 
-            richTextBox1.AppendText("\nNumber of displays: "+ displayCount+" time: "+ System.DateTime.Now);
+            richTextBox1.AppendText("\ntime: "+ System.DateTime.Now + "\tNumber of displays: " + displayCount);
 
             switch (displayCount)
             {
@@ -130,15 +129,6 @@ namespace BackgroundFix
         /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //richTextBox1.AppendText("\n"+sender);
-
-            //DialogResult messageBoxResult = MessageBox.Show("If you want program to continu working just hide it via \"Hide\" button or choose [NO].\n" +
-            //    "Aditional changes to its seting can be made by running executable aggain.\n" +
-            //    "\nWould like program to TERMINATE and STOP changing wallpaper?", "Ake you sure you want to terminate me?", 
-            //    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
-
-            //Application.Run(new MyCloseDialog(this, e));
-
             Thread closeDialog = new Thread(() => Application.Run(new MyCloseDialog(this.Location)));
             closeDialog.Start();
             closeDialog.Join();
@@ -346,6 +336,10 @@ namespace BackgroundFix
                 hideIfSetUp() ;
             }
         }
+        /// <summary>
+        /// try to find and save extencion of images used
+        /// if no images are in directory found, atribtutes extencionSin...and ext..Dual... will be "" (empty string)
+        /// </summary>
         private void setExtensions()
         {
             int delete = 2;//represents action what to do when more files with same name found
@@ -419,6 +413,17 @@ namespace BackgroundFix
             {
                 throw new MoreFilesWithSameNameException("When searching for extension of " + fileName + " more files with same name found", helper);
             } else { return ""; }
+        }
+        /// <summary>
+        /// try to puts file path to images to textBoxes
+        /// </summary>
+        private void setTextboxes()
+        {
+            if (!extencionSinglescreen.Equals("") && !extencionDualscreen.Equals(""))
+            {
+                textBox1.Text = Path.Combine(resources, "Singelscreen" + extencionSinglescreen);
+                textBox2.Text = Path.Combine(resources, "Dualscreen" + extencionDualscreen);
+            }
         }
         /// <summary>
         /// Opens File explorer in res forder

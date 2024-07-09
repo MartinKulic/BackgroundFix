@@ -23,3 +23,4 @@ D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\bin\Debug\Back
 D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\bin\Debug\BackgroundFix.application
 D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.exe.manifest
 D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.application
+D:\Junk\VisualStudio\,C#\Repositories\BackgroundFix\BackgroundFix\obj\Debug\BackgroundFix.MyCloseDialog.resources
