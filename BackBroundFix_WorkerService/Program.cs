@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging.EventLog;
 using Microsoft.VisualBasic.FileIO;
 using System.Diagnostics.Metrics;
 
+
+//Huge thanks to Louie - https://stackoverflow.com/questions/20261523/detect-number-of-display-monitor
+
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddWindowsService(options =>
 {

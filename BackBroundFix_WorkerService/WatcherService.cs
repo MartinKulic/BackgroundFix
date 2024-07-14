@@ -1,28 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Management;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
+
+
+
 
 
 namespace BackBroundFix_WorkerService
 {
-    public partial class WatcherService
+    public class WatcherService
     {
-        const int SM_CMONITORS = 80;
-
-        [LibraryImport("User32.dll", EntryPoint = "GetSystemMetrics")]
-        internal static partial int fGetSystemMetrics(int metric);
-
 
         public string getMessage()
         {
-            int displayCount = fGetSystemMetrics(SM_CMONITORS);
-            return $"Time: {DateTimeOffset.Now}{Environment.NewLine}Number of monitors: {displayCount}";
+           
+            return $"Time: {DateTimeOffset.Now}{Environment.NewLine}Number of monitors: {getMonitorCount()}";
         }
 
+        private int getMonitorCount()
+        {
+            int monitorCount = -1;
+
+            try
+            {
+                ManagementScope scope = new("\\\\.\\ROOT\\cimv2");
+                scope.Connect();
+                ObjectQuery query = new("SELECT * FROM Win32_PnPEntity WHERE Service = 'monitor'");
+
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+                ManagementObjectCollection result = searcher.Get();
+
+                monitorCount = result.Count;
+            }
+            catch (Exception ex)
+            {
+                //ignore
+            }
+
+            return monitorCount;
+        }
 
     }
 }
