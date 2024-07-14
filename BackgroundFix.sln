@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundFix", "BackgroundFix\BackgroundFix.csproj", "{4348CA59-EFB7-49CA-BE0B-145C238C8914}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackBroundFix_WorkerService", "BackBroundFix_WorkerService\BackBroundFix_WorkerService.csproj", "{1FF96C5B-2522-46A0-BDC7-2D9C1EFDFD9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4348CA59-EFB7-49CA-BE0B-145C238C8914}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4348CA59-EFB7-49CA-BE0B-145C238C8914}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4348CA59-EFB7-49CA-BE0B-145C238C8914}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FF96C5B-2522-46A0-BDC7-2D9C1EFDFD9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FF96C5B-2522-46A0-BDC7-2D9C1EFDFD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FF96C5B-2522-46A0-BDC7-2D9C1EFDFD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FF96C5B-2522-46A0-BDC7-2D9C1EFDFD9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
